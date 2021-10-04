@@ -1,5 +1,5 @@
 # 3D Card Payment UI Prototype
-This is a front-end UI prototype for credit/debit card payment form.
+This is a front-end UI prototype for credit/debit card payment form. Click [here](https://nerdyvisky.github.io/card-payment-UI/) to try out yourself.
 
 # Key features
 - Performs a 3D card flip on hover and on-input of the form.
@@ -17,4 +17,3 @@ This is a front-end UI prototype for credit/debit card payment form.
 
 ### Author: Vishvesh Trivedi
 Click [here](https://github.com/NerdyVisky) to check out my projects.
-
