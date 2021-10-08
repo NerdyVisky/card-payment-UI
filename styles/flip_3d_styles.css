@@ -20,6 +20,14 @@ body {
   background: #252525;
 }
 
+.successMessage {
+  color: forestgreen;
+}
+
+.errMessage {
+  color: #e02a2a;
+}
+
 .confetti-wrapper {
   position: absolute;
   z-index: 100;

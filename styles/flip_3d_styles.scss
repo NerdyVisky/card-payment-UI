@@ -12,6 +12,12 @@ body {
   height: 100vh;
   background: rgb(37, 37, 37);
 }
+.successMessage{
+  color: forestgreen;
+}
+.errMessage{
+  color: rgb(224, 42, 42);
+}
 .confetti-wrapper{
   position: absolute;
   z-index: 100;
