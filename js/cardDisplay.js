@@ -119,11 +119,13 @@ const animItem = bodymovin.loadAnimation({
 function processPayment(){
   return new Promise((resolve, reject) =>{
       if(cardNumField.value.length != 16){
-          reject('card number')
+          reject('CARD NUMBER')
       }else if(expiresField.value.length != 5){
-          reject('card expiry')
+          reject('CARD EXPIRY DATE')
       }else if(cvvField.value.length != 3){
-          reject('CVV number')
+          reject('CVV NUMBER')
+      }else if(nameField.value.length == 0){
+          reject('CARD HOLDER NAME')
       }else{
           resolve()
       }
@@ -131,18 +133,21 @@ function processPayment(){
 }
 
 submitBtn.addEventListener('click', ()=>{
-  successBox.innerHTML = `<h1> Payment Processing...</h1> <h4 style="text-align: center;">Do not refresh or close this tab. <br>It may take a few seconds to process your payment. <br>Keep Patience!</h4>`
+  successBox.innerHTML = `<h1> Processing Payment...</h1> 
+  <img class="loaderGIF" src="images/loaderResized.gif" alt=""/>
+  <h4 style="text-align: center;">Do not refresh or close this tab. <br>It may take a few seconds to process your payment. <br>Keep Patience!</h4>`
+  successBox.style.backgroundColor = "rgb(250,252,249)";
   successBox.style.transform = "scale(1)";
   setTimeout(()=>{
       processPayment().then(()=>{
-          successBox.innerHTML = `<h1> Payment Successful! </h1>  <h4 style="text-align: center;">You can now close this window and continue browsing.</h4>  <button class="okay-btn"> Okay! </button>`
+          successBox.innerHTML = `<h1 class="successMessage"> Payment Successful! </h1> <h4 style="text-align: center;">You can now close this window and continue browsing.</h4>  <button class="okay-btn"> Okay! </button>`
           setTimeout(()=>{
             animItem.goToAndPlay(0, true);
         }, 300)
       }).catch((err) =>{
-          successBox.innerHTML = `<h1> Payment Unsuccessful! </h1>  <h4 style="text-align: center;">Whoops! <br> It seems you have entered incorrect ${err} value.</h4>  <button class="okay-btn">Retry</button>`
+          successBox.innerHTML = `<h1 class="errMessage"> Payment Unsuccessful! </h1>  <h4 style="text-align: center;">Whoops! <br> It seems you have entered incorrect ${err}.</h4>  <button class="okay-btn">Retry</button>`
       })
-  }, 3500)
+  }, 4500)
 })
 okayBtn.addEventListener('click', ()=>{
   successBox.style.transform = "scale(0)";
