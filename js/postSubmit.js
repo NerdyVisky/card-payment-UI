@@ -5,6 +5,7 @@ const confettiContainer = document.querySelector('.confetti-wrapper');
 const okayBtn = document.querySelector('.okay-btn');
 
 
+
 const animItem = bodymovin.loadAnimation({
     wrapper: confettiContainer,
     animType: 'svg',
