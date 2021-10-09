@@ -44,10 +44,10 @@ body {
 .success-container {
   position: absolute;
   border-radius: 30px;
-  top: 30%;
-  left: 30%;
-  width: 40%;
-  height: 250px;
+  top: 25%;
+  left: 25%;
+  width: 50%;
+  height: 400px;
   -webkit-transform: scale(0);
           transform: scale(0);
   z-index: 50;
@@ -72,7 +72,7 @@ body {
   transition: transform 300ms ease, -webkit-transform 300ms ease;
 }
 
-.success-container h1, .success-container h4, .success-container button {
+.success-container h1, .success-container h4, .success-container h2, .success-container button {
   font-family: "Ubuntu", monospace;
 }
 

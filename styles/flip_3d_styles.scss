@@ -32,10 +32,10 @@ body {
 .success-container{
   position: absolute;
   border-radius: 30px;
-  top: 30%;
-  left: 30%;
-  width: 40%;
-  height: 250px;
+  top: 25%;
+  left: 25%;
+  width: 50%;
+  height: 400px;
   transform: scale(0);
   z-index: 50;
   background-color: rgb(236, 236, 236);
@@ -45,7 +45,7 @@ body {
   justify-content: space-evenly;
   flex-direction: column;
   transition: transform 300ms ease;
-  h1, h4, button{
+  h1, h4, h2, button{
     font-family: $font-primary;
   }
   h1{

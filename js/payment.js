@@ -112,6 +112,8 @@ const successBox = document.querySelector('.success-container');
 const confettiContainer = document.querySelector('.confetti-wrapper');
 const okayBtn = document.querySelector('.okay-btn');
 
+const payment = 500;
+
 // To setup post-success confetti animation
 const animItem = bodymovin.loadAnimation({
     wrapper: confettiContainer,
@@ -121,60 +123,102 @@ const animItem = bodymovin.loadAnimation({
     path: 'https://assets8.lottiefiles.com/packages/lf20_rovf9gzu.json'
 })
 
+// On click of 'Pay Now' option, code runs from here
+submitBtn.addEventListener('click', ()=>{
+  // Dialog box to showcase payment processing
+  makePayment();
+})
+
 // Javascript Promise to authenticate/process payment or throw error acc. to user input
-function processPayment(){
+function authDetails(){
   return new Promise((resolve, reject) =>{
     // Client side authentication of card details.
       if(cardNumField.value.length != 16){
-          reject('CARD NUMBER')
+          reject('INCORRECT CARD NUMBER')
       }else if(expiresField.value.length != 5){
-          reject('CARD EXPIRY DATE')
+          reject('INCORRECT CARD EXPIRY DATE')
       }else if(cvvField.value.length != 3){
-          reject('CVV NUMBER')
+          reject('INCORRECT CVV NUMBER')
       }else if(nameField.value.length == 0){
-          reject('CARD HOLDER NAME')
+          reject('INCORRECT CARD HOLDER NAME')
       }else{
-        // Actual payment process will take place here
-        // Prefrebly another JS promise to show payment success or throw error
-        //if payment successful then the below resolve is passed.
-          resolve()
+        // on details authentication, card details are passed to company API to make transaction.
+        resolve({
+          cardNumber : cardNumField.value, 
+          expiry:  expiresField.value,
+          cvv: cvvField.value,
+          amount: payment
+      })
       }
   })
 }
 
 
-// On click of 'Pay Now' option, code runs from here
-submitBtn.addEventListener('click', ()=>{
-  // Dialog box to showcase payment processing
-  successBox.innerHTML = 
-  `<h1> Processing Payment...</h1> 
-  <img class="loaderGIF" src="images/loaderResized.gif" alt=""/>
-  <h4 style="text-align: center;">Do not refresh or close this tab. 
-  <br>It may take a few seconds to process your payment. <br>Keep Patience!</h4>`
-  successBox.style.backgroundColor = "rgb(250,252,249)";
-  successBox.style.transform = "scale(1)";
 
-  //Set Timeout function to signify time taken in processing payment while communicating with card company database. 
-  setTimeout(()=>{
-      processPayment().then(()=>{
-        // Success Event Dialog Box
-          successBox.innerHTML = 
-          `<h1 class="successMessage"> Payment Successful! </h1>
-           <h4 style="text-align: center;">You can now close this window and continue browsing.</h4>  
-           <button class="okay-btn"> Okay! </button>`
-          setTimeout(()=>{
-            animItem.goToAndPlay(0, true);
-        }, 300)
-      }).catch((err) =>{
-        //Error Event Dialog Box
+
+function processPayment(cardDetails){
+  return new Promise((resolve, reject) => {
+      console.log(cardDetails);
+      // fetch balance
+      const balance = 100;
+      if(balance>=payment){
+          //Card company makes payment and calls resolve
+          resolve(` INR ${payment} has been deducted from your account`);
+      }else{
+          reject('INSUFFICIENT CARD BALANCE');
+      }
+  })
+}
+
+
+async function makePayment() {
+  try{
+    successBox.innerHTML = 
+    `<h1> Authenticating Card Details...</h1> 
+    <img class="loaderGIF" src="images/loaderResized.gif" alt=""/>
+    <h4 style="text-align: center;">Do not refresh or close this tab. 
+    <br>It may take a few seconds to process your payment. <br>Keep Patience!</h4>`
+    successBox.style.backgroundColor = "rgb(250,252,249)";
+    successBox.style.transform = "scale(1)";
+      
+    const cardDetails = await authDetails();
+
+      setTimeout(() =>{
+        successBox.innerHTML = 
+        `<h1 style="text-align: center;"> Card details authenticated. Processing Payment...</h1> 
+        <img class="loaderGIF" src="images/loaderResized.gif" alt=""/>
+        <h4 style="text-align: center;">Do not refresh or close this tab. 
+        <br>It may take a few seconds to process your payment. <br>Keep Patience!</h4>`
+        successBox.style.backgroundColor = "rgb(250,252,249)";
+        successBox.style.transform = "scale(1)";
+      }, 2000)
+
+      const paymentNotification = await processPayment(cardDetails);
+
+      setTimeout(() =>{
+           // Success Event Dialog Box
+           successBox.innerHTML = 
+           `<h1 style="text-align: center;" class="successMessage"> Payment Successful! <br>${paymentNotification}</h1>
+            <h2 style="text-align: center;">You can now close this window and continue browsing.</h2>  
+            <button class="okay-btn"> Okay! </button>`
+            setTimeout(()=>{
+             animItem.goToAndPlay(0, true);
+         }, 300)
+      }, 5000)
+  } catch (err) {
+      setTimeout(() =>{
+          //Error Event Dialog Box
           successBox.innerHTML = 
           `<h1 class="errMessage"> Payment Unsuccessful! </h1>
-           <h4 style="text-align: center;">Whoops! 
-           <br> It seems you have entered incorrect ${err}.</h4>  
+           <h2 style="text-align: center;">Yikes! 
+           <br> Payment failed due to: ${err}.</h2>  
            <button class="okay-btn">Retry</button>`
-      })
-  }, 4500)
-})
+      }, 4000)
+  }
+  
+} 
+
+
 // Exit button
 okayBtn.addEventListener('click', ()=>{
   successBox.style.transform = "scale(0)";
