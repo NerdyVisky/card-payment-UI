@@ -127,6 +127,7 @@ const animItem = bodymovin.loadAnimation({
 submitBtn.addEventListener('click', ()=>{
   // Dialog box to showcase payment processing
   makePayment();
+  exitOption();
 })
 
 // Javascript Promise to authenticate/process payment or throw error acc. to user input
@@ -160,10 +161,10 @@ function processPayment(cardDetails){
   return new Promise((resolve, reject) => {
       console.log(cardDetails);
       // fetch balance
-      const balance = 100;
+      const balance = 10000;
       if(balance>=payment){
           //Card company makes payment and calls resolve
-          resolve(` INR ${payment} has been deducted from your account`);
+          resolve(` INR ${payment} /- has been deducted from your account`);
       }else{
           reject('INSUFFICIENT CARD BALANCE');
       }
@@ -220,12 +221,15 @@ async function makePayment() {
 
 
 // Exit button
-okayBtn.addEventListener('click', ()=>{
-  successBox.style.transform = "scale(0)";
-  setTimeout(()=>{
-      location.reload()
-  }, 500)
-})
+const exitOption = () => {
+  okayBtn.addEventListener('click', ()=>{
+    successBox.style.transform = "scale(0)";
+    setTimeout(()=>{
+        location.reload()
+    }, 500)
+  })
+}
+
 
 
 
